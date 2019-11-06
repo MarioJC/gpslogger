@@ -1,42 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="filecreation_entries">
+        <item>@string/new_file_creation_onceamonth</item>
         <item>@string/new_file_creation_onceaday</item>
         <item>@string/new_file_creation_everystart</item>
         <item>@string/new_file_creation_custom</item>
     </string-array>
 
     <string-array name="filecreation_values">
+        <item>onceamonth</item>
         <item>onceaday</item>
         <item>everystart</item>
         <item>custom</item>
     </string-array>
 
-    <string-array name="autosend_frequencies">
-        <item>@string/autoemail_frequency_whenistop</item>
-        <item>@string/autoemail_frequency_8</item>
-        <item>@string/autoemail_frequency_6</item>
-        <item>@string/autoemail_frequency_5</item>
-        <item>@string/autoemail_frequency_4</item>
-        <item>@string/autoemail_frequency_3</item>
-        <item>@string/autoemail_frequency_2</item>
-        <item>@string/autoemail_frequency_1</item>
-        <item>@string/autoemail_frequency_05</item>
-        <item>@string/autoemail_frequency_008</item>
-    </string-array>
-
-    <string-array name="autosend_values">
-        <item>0</item>
-        <item>8</item>
-        <item>6</item>
-        <item>5</item>
-        <item>4</item>
-        <item>3</item>
-        <item>2</item>
-        <item>1</item>
-        <item>0.5</item>
-        <item>0.08</item>
-    </string-array>
 
     <string-array name="autoemail_presets">
         <item>@string/emailprovider_google</item>
@@ -53,7 +30,6 @@
     </string-array>
 
 
-
     <string-array name="osm_visibility_choices">
         <item>private</item>
         <item>public</item>
@@ -61,15 +37,12 @@
         <item>identifiable</item>
     </string-array>
 
-    <string-array name="opengts_server_communication_methods">
-        <item>HTTP GET</item>
-        <item>UDP Raw</item>
-    </string-array>
-
     <string-array name="opengts_server_communication_methods_values">
         <item>HTTP</item>
+        <item>HTTPS</item>
         <item>UDP</item>
     </string-array>
+
     <string-array name="autoftp_ssltls_entries">
         <item>@string/autoftp_ssltls_none</item>
         <item>@string/autoftp_ssltls_ssl</item>
@@ -85,7 +58,10 @@
         <item>@string/view_simple</item>
         <item>@string/view_detailed</item>
         <item>@string/view_big</item>
+        <item>@string/view_log</item>
     </string-array>
+
+
 
 
 </resources>

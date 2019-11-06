@@ -1,4 +1,6 @@
-/*******************************************************************************
+/*
+ * Copyright (C) 2016 mendhak
+ *
  * This file is part of GPSLogger for Android.
  *
  * GPSLogger for Android is free software: you can redistribute it and/or modify
@@ -13,13 +15,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with GPSLogger for Android.  If not, see <http://www.gnu.org/licenses/>.
- ******************************************************************************/
+ */
 
 package com.mendhak.gpslogger.loggers.nmea;
 
-import com.mendhak.gpslogger.common.AppSettings;
+import com.mendhak.gpslogger.common.PreferenceHelper;
 import com.mendhak.gpslogger.common.RejectionHandler;
 import com.mendhak.gpslogger.common.Session;
+import com.mendhak.gpslogger.common.Strings;
+import com.mendhak.gpslogger.loggers.Files;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -34,23 +38,33 @@ public class NmeaFileLogger {
     protected final static Object lock = new Object();
     String fileName;
     private final static ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(1, 1, 60, TimeUnit.SECONDS,
-            new LinkedBlockingQueue<Runnable>(128), new RejectionHandler());
+            new LinkedBlockingQueue<Runnable>(10), new RejectionHandler());
+
+    private PreferenceHelper preferenceHelper = PreferenceHelper.getInstance();
+    private Session session = Session.getInstance();
 
     public NmeaFileLogger(String fileName) {
         this.fileName = fileName;
     }
 
-    public void Write(long timestamp, String nmeaSentence) {
+    public void write(long timestamp, String nmeaSentence)  {
 
-        File gpxFolder = new File(AppSettings.getGpsLoggerFolder());
+        File gpxFolder = new File(preferenceHelper.getGpsLoggerFolder());
         if (!gpxFolder.exists()) {
             gpxFolder.mkdirs();
         }
 
-        File gpxFile = new File(gpxFolder.getPath(), Session.getCurrentFileName() + ".nmea");
+        File nmeaFile = new File(gpxFolder.getPath(), Strings.getFormattedFileName() + ".nmea");
 
+        if (!nmeaFile.exists()) {
+            try {
+                nmeaFile.createNewFile();
+            } catch (IOException e) {
 
-        NmeaWriteHandler writeHandler = new NmeaWriteHandler(gpxFile, nmeaSentence);
+            }
+        }
+
+        NmeaWriteHandler writeHandler = new NmeaWriteHandler(nmeaFile, nmeaSentence);
         EXECUTOR.execute(writeHandler);
     }
 }
@@ -75,9 +89,10 @@ class NmeaWriteHandler implements Runnable {
                 writer.write(nmeaSentence);
                 writer.newLine();
                 writer.close();
+                Files.addToMediaDatabase(gpxFile, "text/plain");
 
             } catch (IOException e) {
-                e.printStackTrace();
+
             }
         }
 

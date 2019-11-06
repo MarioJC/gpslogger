@@ -1,73 +1,93 @@
-GPSLogger [![Build Status](https://travis-ci.org/mendhak/gpslogger.svg?branch=master)](https://travis-ci.org/mendhak/gpslogger)
+GPSLogger  [![githubactions](https://github.com/mendhak/gpslogger/workflows/Android%20CI/badge.svg)](https://github.com/mendhak/gpslogger/actions) [![pgp](assets/pgp.png)](https://keybase.io/mendhak)
 =========
 
-GPSLogger is an Android app that logs GPS information to GPX, KML or text files and has options for annotating and sharing.
 
-[Read about GPSLogger here](http://mendhak.github.com/gpslogger/)
+GPSLogger is an Android app that logs GPS information to various formats (GPX, KML, CSV, NMEA, Custom URL) and has options for uploading (SFTP, Google Drive, Dropbox, Email). This app aims to be as battery efficient as possible.
+
+[Read about GPSLogger's features here](http://mendhak.github.com/gpslogger/)
 
 ## Download
 
 You can [download it from Google Play](https://play.google.com/store/apps/details?id=com.mendhak.gpslogger).
 
-You can download the APK directly [here](https://sourceforge.net/projects/gfadownload/files/)
+You can download directly [from the releases](https://github.com/mendhak/gpslogger/releases).
+
+You can find it on [IzzySoft's F-Droid repo](https://apt.izzysoft.de/fdroid/repo) ([link](https://apt.izzysoft.de/fdroid/index/apk/com.mendhak.gpslogger)) 
+
+
 
 ## Contribute
 
-You can help with [translations](http://crowdin.net/project/gpslogger-for-android)
+You can help with [translations](http://crowdin.net/project/gpslogger-for-android) on Crowdin.
 
 You can also submit [pull requests](https://help.github.com/articles/using-pull-requests) for bug fixes and new features.
 
-
-## License
-
-Licensed under [GPL v2](http://www.gnu.org/licenses/gpl-2.0.html).
+I'm not very good at UIs, so any work with the layouts would be appreciated!  
 
 
+## License and policy
 
+[Licensed under GPL v2](LICENSE.md) | [Third party licenses](assets/text/opensource.md) | [Privacy policy](assets/text/privacypolicy.md)
+
+## Donate
+
+[Bitcoin](https://blockchain.info/payment_request?address=14bKk4sR1AD7avuJfBx2izy2FwyqMXEvcY) | [Paypal](https://paypal.me/mendhak) 
+
+
+## Verifying
+
+It's good practice to verify downloads.  In recent releases, a PGP signature and an SHA256 checksum will accompany each `.apk`.
+
+Import PGP Public Key from [Keybase.io](https://keybase.io/mendhak) or just `gpg --recv-key 6989CF77490369CFFDCBCD8995E7D75C76CBE9A9`
+
+To verify the integrity and signature:
+
+    $ gpg --verify ~/Downloads/gpslogger-71.apk.asc
+    
+To verify checksum:    
+    
+    $ sha256sum -c ~/Downloads/gpslogger-71.apk.SHA256
 
 
 Setting up the code
 =========
 
 
-The project is based on the new [Android build system](http://tools.android.com/tech-docs/new-build-system/user-guide) plugin for Gradle.
-Feel free to adopt and document your own OS and IDEs.  These instructions are for Ubuntu Linux with IntelliJ 13.1.2 onwards.
+The project is based on the [Android build system](http://tools.android.com/tech-docs/new-build-system/user-guide) plugin for Gradle.
+Feel free to adopt and document your own OS and IDEs.  These instructions are for Ubuntu Linux with IntelliJ IDEA.
 
 ### Set up your Android Development Environment
 
 Follow the instructions on the [Android Developer Website](http://developer.android.com/sdk/installing/index.html) to set up your computer for development.
 
-On Ubuntu 64bit, you may also need `ia32-libs`, follow [these instructions](http://stackoverflow.com/a/21956268/974369).  I did not need this for Ubuntu 14.04.
 
 
-### Get IntelliJ IDEA
+![intellij](assets/logo_IntelliJIDEA.png)
 
 Download and install [IntelliJ IDEA Community Edition](http://www.jetbrains.com/idea/download/index.html), which is free.
-Note that the Android build system version 0.9 does not work well with anything earlier than IntelliJ 13.1.2.
 
-
-### Get the Android SDK extra repositories
-
-This project uses certain Google libraries, you will need to add them. Run
-
-    <AndroidSDK>/tools/android
-
-Which brings up the Android SDK manager.  In here, choose
-
-*  Tools > Android SDK build tools 19.0.3
-*  Extras > Android Support Repository
-*  Extras > Android Support Library
-*  Extras > Google Play services
-*  Extras > Google Repository
 
 ### Clone the GPSLogger repository
 
     git clone git://github.com/mendhak/gpslogger.git
 
+### Get the Android SDK extra repositories
+
+This project uses certain Android libraries, you can install them using Google's poorly implemented [`sdkmanager`](https://developer.android.com/studio/command-line/sdkmanager.html):
+
+      echo y | $HOME/android-sdk/tools/bin/sdkmanager 'tools'
+      echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platform-tools'
+      echo y | $HOME/android-sdk/tools/bin/sdkmanager 'build-tools;26.0.2'
+      echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platforms;android-27'
+      echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platforms;android-25'
+      echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;google;m2repository'
+      echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;android;m2repository'
+      echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;google;google_play_services'
+
 
 ### Create local.properties
 
-IntelliJ/Android Studio [may not detect](http://stackoverflow.com/questions/19794200/gradle-android-and-the-android-home-sdk-location) your `ANDROID_HOME` environment variable, so create a file called `local.properties`, pointing at your Android SDK directory.
+Create a file called `local.properties`, pointing at your Android SDK directory.
 
     cd gpslogger
     echo "sdk.dir=/home/mendhak/Programs/Android" > local.properties
@@ -78,28 +98,19 @@ Open up IntelliJ and choose to import a project.  Select the topmost `build.grad
 
 If you get an Import dialog, choose to *Import project from external model*
 
-![import](https://farm3.staticflickr.com/2808/13543335914_3b709dca56_o.png)
+![import](assets/import_1.png)
 
 On the next screen, choose the defaults and proceed (default gradle wrapper)
 
-![import](https://farm3.staticflickr.com/2861/13543635053_042a02c11d_b.jpg)
+![import](assets/import_2.jpg)
 
 Give it a minute and IntelliJ/Gradle will configure the projects and download the various libraries.
 
 IntelliJ may not know where your Android SDK is.  You can find this under *File > Project Structure...* where you should set the Project SDK.  You will want to use Java 1.6 with Android 4 or above.
 
-
-### Test.xml
-
-Create a test.xml in the project at res/values/test.xml with an empty resources tag
-
-    <resource />
-
-This file can be used to store OAuth keys if you want OpenStreetMap and DropBox functionality (below).  This file is ignored in the .gitignore file and will not be committed.
-
 ### OpenStreetMap Setup (Optional)
 
-Sign up for an account with [OpenStreetMap](http://openstreetmap.org) and log in.
+Sign up for an account with [OpenStreetMap](https://openstreetmap.org) and log in.
 
 Click on 'oauth settings'
 
@@ -107,12 +118,13 @@ Click on 'Register your application'
 
 Fill in the form with these details
 
-![Oauth settings](http://farm9.staticflickr.com/8147/7645348952_f2834d18e9_o.png)
+![Oauth settings](assets/osm_oauth_settings.png)
 
-After registering the application, you will receive a 'Consumer Key' and a 'Consumer Secret'.  Place the keys in your test.xml like this:
+After registering the application, you will receive a 'Consumer Key' and a 'Consumer Secret'.  
+Place the keys in your `~/.gradle/gradle.properties` like this:
 
-    <string name="osm_consumerkey">ABCDEF</string>
-    <string name="osm_consumersecret">GHIJKLMNOP</string>
+    GPSLOGGER_OSM_CONSUMERKEY=abcdefgh
+    GPSLOGGER_OSM_CONSUMERSECRET=1234123456
 
 
 ### Dropbox Setup (Optional)
@@ -123,17 +135,17 @@ Go to the [Dropbox Developers page](https://www.dropbox.com/developers/apps) and
 
 Use these settings, but choose a unique name
 
-![Dropbox settings](http://farm8.staticflickr.com/7139/7645470952_5c75ac3ac2_o.png)
+![Dropbox settings](assets/dropbox_settings_create.png)
 
 After creating the app, you will receive an app key and secret (the ones in the screenshot are fake)
 
-![Dropbox settings](http://farm8.staticflickr.com/7267/7645470752_ae9a7e4ed2_o.png)
+![Dropbox settings](assets/dropbox_settings.png)
 
-Add the Dropbox app key to your test.xml file
+Place the keys in your `~/.gradle/gradle.properties` like this:
 
 
-    <string name="dropbox_appkey">12341234</string>
-    <string name="dropbox_appsecret">abcdabcdefg</string>
+    GPSLOGGER_DROPBOX_APPKEY=abcdefgh
+    GPSLOGGER_DROPBOX_APPSECRET=1234123456
 
 
 Replace the Dropbox app key to your AndroidManifest.xml file
@@ -151,49 +163,33 @@ Choose "Installed Application" and then under Installed Application Type, choose
 [Learn More](https://developers.google.com/console/help/#installed_applications) to specify the package name and
 the SHA1 fingerprint of your debug certificate.
 
-![GAPI Console](http://farm3.staticflickr.com/2866/9113223789_222f62a51a_c.jpg)
+![GAPI Console](assets/gapi_console.jpg)
 
 The Google Docs feature requires the [Google Play Services Framework](http://developer.android.com/google/play-services/index.html),
 so ensure that the emulator you are using is Android 4.2.2 (API level 17) or greater if you want to use this feature.
 
-![AVD](http://farm6.staticflickr.com/5322/9113255381_9fba026576_o.png)
+![AVD](assets/avd.png)
 
 You can also debug directly against your phone - all phones Android 2.2 and above should have this framework installed.
 
 
-### Running tests
+### Android Wear
 
-This solution has a few [Robotium](https://code.google.com/p/robotium/) tests.  To run them, first ensure that you
-have an emulator up and running or your phone is connected.  In other words, `adb devices` should show a connected device.
+Due to extremely low usage and the final straw when Google deleted a Play service library version, I've had to remove Android Wear from this application.
 
-Then run the tests using the gradle wrapper
-
-     ./gradlew connectedAndroidTest --info
-
-If a test fails and you want a little more info, you can add the `stacktrace` and `debug` flags
-
-    ./gradlew connectedAndroidTest --debug --stacktrace
-
-You can also try running the tests straight from the IDE.  Right click on a test class such as `GpsMainActivityTests`
-or on the `src/test/java` folder and choose to run it with the Android test instrumentation runner.
-
-![Android tests](https://farm8.staticflickr.com/7248/13943655031_7ee4e7e92f_z.jpg)
-
-And you should get results in the Run tab.
-
-![tests](https://farm8.staticflickr.com/7424/13796700395_021e03cd8e_o.png)
-
-You can run just the quicker `@SmallTest`s using
-
-    ./gradlew connectedAndroidTest -PtestSize=small --info
 
 Overview
 ======
 
 GPSLogger is composed of a few main components;
 
-![test](https://drive.google.com/uc?export=view&id=0B6IOK82n4BkAankxcFJmYk90Y0U)
+![design](assets/gpslogger_architecture.png)
 
+### Event Bus
+
+The Event Bus is where all the cross communication happens.  Various components raise their events on the Event Bus,
+and other parts of the application listen for those events.  The most important one is when a location is obtained,
+ it is placed on the event bus and consumed by many fragments.
 
 ### GPS Logging Service
 
@@ -201,15 +197,15 @@ GPSLoggingService is where all the work happens.  This service talks to the loca
 It sets up timers and alarms for the next GPS point to be requested.  It passes location info to the various loggers
 so that they can write files.  It also invokes the auto-uploaders so that they may send their files to Dropbox, etc.
 
-It also passes information to the GPSMainActivity.
+It also passes information to the Event Bus.
 
 ### GPS Main Activity
 
 This is the main visible form in the app.   It consists of several 'fragments' - the simple view, detailed view and big view.
 
-It takes care of the main screen, the menus and passing information from the GPSLoggingService to the various fragments.
+It takes care of the main screen, the menus and toolbars.
 
-It also passes requests from the fragments to start or stop logging.
+The fragments listen to the Event Bus for location changes and display it in their own way.
 
 ### Session and AppSettings
 
